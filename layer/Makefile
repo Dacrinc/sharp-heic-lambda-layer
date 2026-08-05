@@ -1,9 +1,16 @@
 # Library Versions
 WEBP_VERSION=1.4.0
-LIBDE265_VERSION=1.0.15
+LIBDE265_VERSION=1.0.18
 LIBAOM_VERSION=3.9.0
 X265_VERSION=3.6
-LIBHEIF_VERSION=1.17.6
+# 1.17.6 rejected iOS 18+ HDR photos: their Exif item points at both the primary
+# image and the `tmap` gain map, and libheif refused any `cdsc` reference count
+# other than 1 ("Metadata not correctly assigned to image"). 1.18 replaced that
+# hard error with a loop over all references.
+# Do not move past 1.19.x without also bumping VIPS_VERSION and revisiting
+# libvips' heifload security limits - libvips >= 8.17 caps max_items at 16,
+# which rejects tiled iPhone HEICs (45 tiles) unless callers pass `unlimited`.
+LIBHEIF_VERSION=1.19.8
 VIPS_VERSION=8.15.2
 SHARP_VERSION=0.33.3
 
