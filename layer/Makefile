@@ -15,6 +15,7 @@ X265_VERSION=3.6
 LIBHEIF_VERSION=1.19.8
 VIPS_VERSION=8.15.2
 SHARP_VERSION=0.33.3
+NODE_ADDON_API_VERSION=8.1.0
 
 PREFIX_PATH=/usr/local
 LIB_PATH=$(PREFIX_PATH)/lib
@@ -32,7 +33,11 @@ build-SharpHEICLayer: libvips
 	# extract list with ldd from sharp.node, manipulate a bit to only get the absolute paths, then copy
 
 	# install
-	npm install --save --prefix "$(ARTIFACTS_DIR)/nodejs/" node-addon-api node-gyp
+	# node-addon-api is pinned: 8.8.0 added std::string_view overloads that need
+	# C++17, while sharp $(SHARP_VERSION) still compiles its bindings as C++14, so an
+	# unpinned install fails with "'std::string_view' has not been declared".
+	# 8.1.0 is the version this layer was last built against successfully.
+	npm install --save --prefix "$(ARTIFACTS_DIR)/nodejs/" node-addon-api@$(NODE_ADDON_API_VERSION) node-gyp
 	npm install --build-from-source --prefix "$(ARTIFACTS_DIR)/nodejs/" --verbose --foreground-scripts --platform=linux --arch=x64 sharp@$(SHARP_VERSION)
 
 	# debug logs
