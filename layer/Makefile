@@ -1,6 +1,8 @@
 # Library Versions
 WEBP_VERSION=1.4.0
-LIBDE265_VERSION=1.0.18
+# Stay on 1.0.15 until the libde265 target is ported to cmake: 1.0.16 dropped
+# autotools, so newer tarballs ship no autogen.sh/configure.
+LIBDE265_VERSION=1.0.15
 LIBAOM_VERSION=3.9.0
 X265_VERSION=3.6
 # 1.17.6 rejected iOS 18+ HDR photos: their Exif item points at both the primary
